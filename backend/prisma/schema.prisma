@@ -34,28 +34,28 @@ model User{
 
 
 model Problem{
-  id String @id @default(cuid)
+  id String @id @default(cuid())
   title String 
   description String
   difficultyLevel Difficulty
   tags String[]
   userId String
-  examples json  // json se hamare paas control rahega ki ki format mai value jayegi 
+  examples Json  // Json se hamare paas control rahega ki ki format mai value jayegi 
   hints String?
   constraints String
   editorial String?
-  testcases json
+  testcases Json
   questionImage String?
-  codenippets json
-  referenceSolutions json
+  codenippets Json
+  referenceSolutions Json
   answerImage String?
-  status StatusRole @default(NOT COMPLETED)
+  status StatusRole @default(NOTCOMPLETED)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
 
   //relation 
-  user User @relation(fields: [userId] , references : [id] ,ondelete : Cascade)
+  user User @relation(fields: [userId] , references : [id] ,onDelete : Cascade)
 }
 
 enum UserRole{
@@ -65,7 +65,7 @@ enum UserRole{
 
 enum StatusRole {
   COMPLETED
-  NOT COMPLETED
+  NOTCOMPLETED
 }
 
 enum Difficulty {

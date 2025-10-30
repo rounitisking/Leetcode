@@ -1,0 +1,41 @@
+-- to initialize the prisma in the project we have to do npx prisma init 
+-- then we will create a prisma client in libs folder -- written below are the steps 
+-- first write cmd in terminal -- npx prisma generate -- by this commnand we generate the prisma client 
+-- edit he db file 
+-- run cmd -- npx prisma migrate dev-- by this command database mai tables create ho jayengi 
+-- then run cmd -- npx prisma db push
+                -- bcz -- The command npx prisma db push
+
+👉 syncs your Prisma schema with the database directly — without creating migration files.
+🧩 In short:
+
+
+🏗️ It creates or updates tables in your database based on your current schema.prisma.
+
+
+🚫 It does NOT generate or track migrations.
+
+
+⚙️ Used mostly during early development or prototyping.
+
+
+
+✅ Example:
+If you added a new model in schema.prisma and run
+npx prisma db push
+
+then Prisma will instantly create that table in your DB — fast and simple.
+💡 But for production or version-tracked setups, use
+npx prisma migrate dev
+
+because that one keeps migration history.
+
+
+
+
+
+-- if we want a want a jwt secret we can access it by -- writng the cmd in the bash - openssl rand -hex 32
+
+
+
+
