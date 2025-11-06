@@ -39,3 +39,6 @@ because that one keeps migration history.
 
 
 
+-- run command npx prisma studio to chanage any field in the database 
+
+

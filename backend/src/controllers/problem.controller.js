@@ -1,6 +1,6 @@
-import {getJudgeZeroLanguageId} from "../libs/judgeLangId.libs"
-import {submissionBatch} from "../libs/submissionResult.libs"
-import {db} from "../libs/db"
+import {getJudgeZeroLanguageId} from "../libs/judgeLangId.libs.js"
+import {submissionBatch} from "../libs/submissionResult.libs.js"
+import {db} from "../libs/db.js"
 
 
 
@@ -88,7 +88,7 @@ const createProblem = async (req  , res )=>{
 
             // yaha pr ham language ka code  obtain krva rhe hai
 
-            for(const [language , solutionCode] of Object.entries(referencetokenSolutions)){
+            for(const [language , solutionCode] of Object.entries(referenceSolutions)){
                     const languageId = getJudgeZeroLanguageId(language)
 
                     if(!languageId){
@@ -167,5 +167,117 @@ const createProblem = async (req  , res )=>{
 
 
 
+const getAllProblems = async (req, res)=>{
 
-export {createProblem}
+    try {
+        
+        const exsisting_problem = await db.Problem.findMany()
+
+        if(!exsisting_problemproblem){
+          return   res.status(400).json({
+                error : "no problem found"
+            })
+        }
+        
+        
+       return res.status(200).json({
+        success : true,
+            msg : "problem fetched succesfully",
+            problem : exsisting_problem
+        })
+
+
+    } catch (error) {
+        console.log("error occured in the get all problem controller",error)
+    }
+}
+
+const getProblemsById = async (req, res)=>{
+    try {
+        
+        const {problem_id} = req.params
+
+        if(!problem_id){
+            return res.status(400).json({
+                error : "problem id not found"
+            })
+        }
+
+        const exsisting_problem = await db.Problem.findUnique({
+            where : {
+                id : problem_id
+            }
+        })
+
+        if(!exsisting_problem){
+           return  res.status(400).json({
+                error : "no problem found"
+            })
+        }
+
+        return  res.status(200).json({
+            success : true,
+                msg : "problem found",
+                problem : exsisting_problem
+            })
+        
+    } catch (error) {
+        console.log("error occured in the get problem by id controller")
+    }
+}
+
+
+const  updateProblem = async(req , res)=>{
+
+}
+
+const  deleteProblem = async(req , res)=>{
+
+    try {
+        
+         const {problem_id} = req.params
+
+        if(!problem_id){
+            return res.status(400).json({
+                error : "problem id not found"
+            })
+        }
+
+        const exsisting_problem = await db.Problem.findUnique({
+            where : {
+                id : problem_id
+            }
+        })
+
+        if(!exsisting_problem){
+           return  res.status(400).json({
+                error : "no problem found"
+            })
+        }
+
+
+        await db.Problem.delete({
+            where : {
+                id : problem_id
+            }
+        })
+
+        return  res.status(200).json({
+            success : true,
+                msg : "problem deleted successfully"
+            })
+
+
+
+
+    } catch (error) {
+        console.log("error occured in the delete problem controller", error)
+    }
+}
+
+// const  deleteProblem = async(req , res)=>{
+
+// }
+
+
+export {createProblem , getAllProblems ,getProblemsById , deleteProblem}
