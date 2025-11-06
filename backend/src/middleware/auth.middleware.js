@@ -124,10 +124,10 @@ export const checkAdmin = async (req, res, next)=>{
             const userId = req.user.id
 
             if(!userId){
-                res.status(400).json({
+                return res.status(400).json({
                     msg : "cannot get the user id"
                 })
-                
+            } 
                 const user = db.user.findUnique({
                     where : {id : userId},
                     select :  {
@@ -139,13 +139,13 @@ export const checkAdmin = async (req, res, next)=>{
 
             if(!user){
                 
-                res.status(400).json({
+                return res.status(400).json({
                     msg : "user not found in the role middleware "
                 })
             }
                 
             if(user.role != "ADMIN"){
-                res.status(400).json({
+                return res.status(400).json({
                    msg : "only admin can create the questions"
                })
 
@@ -153,7 +153,7 @@ export const checkAdmin = async (req, res, next)=>{
 
             
             next()
-        }
+        
     } catch (error) {
         console.log("error occured while cheking the role of the user", error) 
     }
