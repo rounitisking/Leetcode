@@ -113,3 +113,50 @@ export const authMiddleware = async(req ,res , next)=>{
 
     
 }
+
+
+
+// this is called as rba - rolled back access 
+
+export const checkAdmin = async (req, res, next)=>{
+
+        try {
+            const userId = req.user.id
+
+            if(!userId){
+                res.status(400).json({
+                    msg : "cannot get the user id"
+                })
+                
+                const user = db.user.findUnique({
+                    where : {id : userId},
+                    select :  {
+                        email : true ,
+                        role : true
+                    }
+                })
+
+
+            if(!user){
+                
+                res.status(400).json({
+                    msg : "user not found in the role middleware "
+                })
+            }
+                
+            if(user.role != "ADMIN"){
+                res.status(400).json({
+                   msg : "only admin can create the questions"
+               })
+
+            }
+
+            
+            next()
+        }
+    } catch (error) {
+        console.log("error occured while cheking the role of the user", error) 
+    }
+    
+    
+}
