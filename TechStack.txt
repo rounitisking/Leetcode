@@ -1,0 +1,16 @@
+BACKEND ::
+
+1.Node js 
+2.Express js
+3.Postgress -- datebase 
+4.Prism -- orm
+5.judge 0 -- for code execution 
+
+
+FRONTEND ::
+1.Javascript
+2.React js / vite
+3.Tailwind css
+4.Daisy- ui
+5.Zustand
+6.zod and react hooks forms

@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+
+  id String @id @default(uuid())
+  name String? 
+  email String @unique
+  password String
+  image String?
+  role UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  //creating a relation with the problem 
+  problems Problem[]
+  submission Submission[]
+  problemsSolved problemSolved[]
+  playlists Playlist[]
+}
+
+
+model Problem{
+  id String @id @default(uuid())
+  title String @unique
+  description String
+  difficultyLevel Difficulty
+  tags String[]
+  userId String? // here we are keepign it optional so that in future if we want that on deleting the user the problem created by that user does not get deleted we can remove on delete cascade
+  examples Json  // Json se hamare paas control rahega ki ki format mai value jayegi 
+  hints String?
+  constraints String
+  editorial String?
+  testcases Json
+  questionImage String?
+  codenippets Json // the starter code of the problem in different languages
+  referenceSolutions Json // the solution of the problem in different languages
+  answerImage String?
+  status StatusRole @default(NOTCOMPLETED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  //relation 
+  user User? @relation(fields: [userId] , references : [id] ,onDelete : Cascade)
+  submission Submission[]
+  solvedBy problemSolved[]
+  problemInPlaylist problemInPlaylist[]
+}
+
+model Submission{
+  id String @id @default(uuid())
+  userId String
+  problemId String
+  sourceCode Json
+  language String
+  stdin String?
+  stdout String?
+  stderr String?
+  compileOutput String?
+  status String //accepted ,wrong answer 
+  memory String
+  time String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId] , references : [id] ,onDelete : Cascade)
+  problem Problem @relation(fields: [problemId] , references : [id] ,onDelete : Cascade)
+
+  testcases TestcaseResult[]
+}
+
+
+model TestcaseResult{
+  id String @id @default(uuid())
+
+  submissionId String
+  testCased Int 
+  passed Boolean
+  input String?
+  expectedOutput String?
+  actualOutput String?
+  status String?
+  stderr String?
+  compileOutput String?
+  memory String?
+  time String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])
+}
+
+model problemSolved{
+  id String @id @default(uuid())
+  userId String 
+  problemId String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId , problemId])
+}
+
+model Playlist{
+  id String @id @default(uuid())
+  name String
+  description String?
+  userId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problems   problemInPlaylist[]
+  @@unique([name , userId]) // ek user ek naam se ek hi playlist bana sakta hai 
+}
+
+model problemInPlaylist{
+  id String @id @default(uuid())
+  playlistId String
+  problemId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  playlist Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId , problemId]) // ek playlist  ke andar ek hi problem ho
+}
+
+enum UserRole{
+  USER
+  ADMIN
+}
+
+enum StatusRole {
+  COMPLETED
+  NOTCOMPLETED
+}
+
+enum Difficulty {
+  HARD
+  MEDIUM 
+  EASY
+}
