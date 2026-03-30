@@ -211,11 +211,11 @@ const checkuser = async (req ,res)=>{
     try {
         return res.status(200).json({
             success : true,
-            "msg" : "user logged in successfully",
+            "msg" : "user authenticated successfully",
             "user" : req.user
         })
     } catch (error) {
-        console.log("error occured in the logout fucntion", error)
+        console.log("error occured in the auth check function", error)
         
     }
 }

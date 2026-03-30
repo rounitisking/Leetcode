@@ -14,7 +14,7 @@ const app = express()
 
 
 app.use(cors({
-  origin: "http://localhost:8070", // ya jo bhi tera frontend/Postman origin hai
+  origin: ["http://localhost:8070"], // ya jo bhi tera frontend/Postman origin hai
   credentials: true
 }))
 app.use(express.json())
