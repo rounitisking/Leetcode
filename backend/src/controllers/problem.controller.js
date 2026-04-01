@@ -176,7 +176,15 @@ const getAllProblems = async (req, res)=>{
 
     try {
         
-        const exsisting_problem = await db.Problem.findMany()
+        const exsisting_problem = await db.Problem.findMany({
+            include : {
+                solvedBy : {
+                    where : {
+                        userId : req.user.id
+                    }
+                }
+            }   
+        })
 
         if(!exsisting_problem){
           return   res.status(400).json({

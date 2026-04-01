@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import { useState } from 'react';
-import {axiosInstance} from "../lib/axios"
+import {axiosInstance} from "../libs/axios.js"
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 
@@ -564,7 +564,7 @@ const CreateProblemForm = () => {
   const onSubmit = async (value)=>{
    try {
     setIsLoading(true)
-    const res = await axiosInstance.post("/problems/create-problem" , value)
+    const res = await axiosInstance.post("/problems/createProblem" , value)
     console.log(res.data);
     toast.success(res.data.message || "Problem Created successfully⚡");
     navigation("/");

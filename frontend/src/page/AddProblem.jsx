@@ -1,10 +1,10 @@
 import React from 'react'
 import CreateProblemForm from '../components/CreateProblemForm'
 
-const addProblem = () => {
+const AddProblem = () => {
   return (
     <div><CreateProblemForm/></div>
   )
 }
 
-export default addProblem
+export default AddProblem
